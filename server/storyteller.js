@@ -1,149 +1,157 @@
+// server/storyteller.js
 require("dotenv").config();
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// --- CORRECTED IMPORTS ---
+// Import AzureOpenAI from the main 'openai' package
+const { AzureOpenAI } = require("openai");
+// AzureKeyCredential is still needed if you were using it, but the constructor might take the key directly
+// Let's try passing the key directly first as per common 'openai' library usage for Azure
+// const { AzureKeyCredential } = require("@azure/core-auth"); NO LONGER NEEDED for this constructor style
+const axios = require('axios'); // For fetching journal entries
 
 class StoryGenerator {
   constructor(token) {
-    const apiKey = process.env.GEMINI_API_KEY || "";
-    if (!apiKey || apiKey === "AIzaSyD2e4TPfRcCHAc_9fEHna_3duYuoN") {
-      console.warn("Warning: No valid API key found in GEMINI_API_KEY. Using placeholder (may fail).");
+    // --- Azure OpenAI Configuration ---
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+    const azureApiKey = process.env.AZURE_OPENAI_KEY;
+    this.deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME; // Keep this
+    // Get API Version from .env or use a recent default (check Azure docs for current recommended)
+    const apiVersion = process.env.AZURE_OPENAI_API_VERSION || "2024-02-01"; // Example: Use a recent stable version
+
+    if (!endpoint || !azureApiKey || !this.deploymentName) {
+      console.warn(
+        "Azure OpenAI environment variables (ENDPOINT, KEY, DEPLOYMENT_NAME) are not fully configured. Story generation may fail."
+      );
+      this.openaiClient = null;
+    } else {
+      try {
+        console.log(`Initializing AzureOpenAI client (from 'openai' package) for endpoint: ${endpoint}`);
+        // --- CORRECTED CONSTRUCTOR ---
+        // Use AzureOpenAI from 'openai' package
+        // Pass configuration directly as properties in an object
+        this.openaiClient = new AzureOpenAI({
+          endpoint: endpoint,         // Pass the endpoint
+          apiKey: azureApiKey,        // Pass the API key directly
+          deployment: this.deploymentName, // Pass the deployment name (used implicitly by methods now)
+          apiVersion: apiVersion,     // Specify the API version
+        });
+        console.log("AzureOpenAI client initialized successfully.");
+      } catch (error) {
+        console.error("Failed to initialize AzureOpenAI client:", error);
+        this.openaiClient = null;
+      }
     }
-    console.log("Using API key:", apiKey);
-    this.genAI = new GoogleGenerativeAI(apiKey);
-    this.token = token; // Store the token for authenticated requests
+    // --- End Azure OpenAI Configuration ---
+    this.token = token; // Store the user auth token
   }
 
   async fetchJournalEntries() {
+    // ... (This method remains the same - no changes needed) ...
+    if (!this.token) {
+        console.error("Authentication token missing for fetching journal entries.");
+        return { texts: [] };
+    }
+    const apiUrl = "http://localhost:5000/api/journal/texts";
+    console.log(`Fetching journal entries from: ${apiUrl}`);
     try {
-      const response = await fetch("http://localhost:5000/api/journal/texts", {
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
+      const response = await axios.get(apiUrl, {
+        headers: { 'Authorization': `Bearer ${this.token}`, 'Accept': 'application/json' }
       });
-      if (!response.ok) {
-        throw new Error(`Failed to fetch journal entries: ${response.status} ${response.statusText}`);
+      const responseData = response.data;
+      if (responseData && Array.isArray(responseData.texts)) {
+        console.log(`Journal entries fetched successfully. Count: ${responseData.texts.length}`);
+        return responseData;
+      } else {
+        console.warn("Received unexpected data format from /api/journal/texts:", responseData);
+        return { texts: [] };
       }
-      const entries = await response.json();
-      return entries;
     } catch (error) {
-      console.error("Error fetching entries:", error.message);
+      const status = error.response?.status;
+      const message = error.response?.data?.message || error.message;
+      console.error(`Error fetching journal entries (Status: ${status}): ${message}`);
       return { texts: [] };
     }
   }
 
-  parseMemories(entries) {
-    const parsed = [];
-    for (const entry of entries) {
-      const setting = this.extractSetting(entry);
-      const emotion = this.extractEmotion(entry);
-      const event = this.extractEvent(entry, setting);
-      parsed.push({ setting, emotion, event });
+  adaptMoodToInstructions(mood) {
+     // ... (This method remains the same - no changes needed) ...
+     let toneStyleInstruction = "Tell the story in a clear and straightforward style.";
+    switch (mood?.toLowerCase() ?? 'neutral') {
+      case "melancholic": toneStyleInstruction = "Tell the story with a reflective and somewhat somber tone..."; break;
+      case "joyful": toneStyleInstruction = "Tell the story with an upbeat, warm, and happy tone..."; break;
+      case "mysterious": toneStyleInstruction = "Weave an air of mystery and intrigue into the story..."; break;
+      case "thrilling": toneStyleInstruction = "Make the story exciting and tense..."; break;
+      case "serene": toneStyleInstruction = "Create a calm, peaceful, and tranquil atmosphere..."; break;
+      case "nostalgic": toneStyleInstruction = "Evoke a sense of sentimentality and wistfulness..."; break;
     }
-    console.log("Parsed memories:", parsed);
-    return parsed;
+    console.log(`Mood instructions for "${mood}": ${toneStyleInstruction}`);
+    return toneStyleInstruction;
   }
 
-  extractSetting(entry) {
-    const words = entry.toLowerCase().split(" ");
-    const settings = ["window", "lake", "shop", "coffee", "garden", "room", "forest", "street"];
-    return words.find(word => settings.includes(word)) || "unknown place";
-  }
-
-  extractEmotion(entry) {
-    const lowerEntry = entry.toLowerCase();
-    if (lowerEntry.includes("thinking") || lowerEntry.includes("old") || lowerEntry.includes("remember")) return "nostalgia";
-    if (lowerEntry.includes("smiling") || lowerEntry.includes("laughed") || lowerEntry.includes("favourite") || lowerEntry.includes("happy")) return "joy";
-    if (lowerEntry.includes("closed") || lowerEntry.includes("lost") || lowerEntry.includes("sad")) return "loss";
-    if (lowerEntry.includes("new") || lowerEntry.includes("added")) return "curiosity";
-    return "neutral";
-  }
-
-  extractEvent(entry, setting) {
-    const lowerEntry = entry.toLowerCase();
-    const settingIndex = lowerEntry.indexOf(setting);
-    if (settingIndex !== -1) {
-      const eventText = entry.slice(settingIndex + setting.length).trim();
-      return eventText || "an event unfolded";
+  async weaveStoryWithAzureOpenAI(journalTexts, mood) {
+    if (!this.openaiClient) {
+        console.error("weaveStoryWithAzureOpenAI: Azure OpenAI client not available.");
+        return "Story generation service is unavailable due to configuration issues.";
     }
-    const keywords = ["my", "favourite", "new", "added"];
-    let event = entry;
-    keywords.forEach(keyword => {
-      event = event.replace(new RegExp(keyword, "gi"), "").trim();
-    });
-    return event || "an event unfolded";
-  }
 
-  adaptToMood(mood) {
-    let tone, style;
-    switch (mood.toLowerCase()) {
-      case "melancholic":
-        tone = "reflective, somber";
-        style = "slow-paced, detailed";
-        break;
-      case "joyful":
-        tone = "upbeat, warm";
-        style = "light, conversational";
-        break;
-      case "mysterious":
-        tone = "enigmatic, subtle";
-        style = "intriguing, descriptive";
-        break;
-      case "thrilling":
-        tone = "exciting, tense";
-        style = "fast-paced, vivid";
-        break;
-      case "serene":
-        tone = "calm, peaceful";
-        style = "gentle, flowing";
-        break;
-      case "nostalgic":
-        tone = "sentimental, wistful";
-        style = "reflective, evocative";
-        break;
-      default:
-        tone = "neutral";
-        style = "clear, straightforward";
-    }
-    return { tone, style };
-  }
+    const moodInstructions = this.adaptMoodToInstructions(mood);
+    const messages = [
+        { role: "system", content: `You are a compassionate... storyteller... (Your system prompt)` },
+        { role: "user", content: `Please write a story with the following mood: **${mood}**. ${moodInstructions}\n\nMemories:\n${journalTexts.map(text => `- "${text.replace(/"/g, "'")}"`).join('\n')}\n\nCreate a unique story.`}
+    ];
 
-  async weaveStoryWithGemini(parsedMemories, tone, style) {
-    const model = this.genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    let prompt = `Create a compelling story with a ${tone} tone and ${style} style based on these memories:\n`;
-    parsedMemories.forEach(memory => {
-      prompt += `- In ${memory.setting}, ${memory.event}, with a sense of ${memory.emotion}.\n`;
-    });
-    prompt += "Structure it with a clear beginning, middle, and end. Use the full context of each memory to enrich the narrative.";
-    console.log("Gemini prompt:", prompt);
+    console.log("Sending prompt to Azure OpenAI using 'openai' package client:");
+    console.log("--------------------PROMPT START--------------------");
+    console.log(JSON.stringify(messages, null, 2));
+    console.log("---------------------PROMPT END---------------------");
 
     try {
-      const result = await model.generateContent(prompt);
-      return await result.response.text();
-    } catch (error) {
-      console.error("Gemini API error:", error);
-      let fallbackStory = "";
-      if (parsedMemories.length > 0) {
-        fallbackStory += `In ${parsedMemories[0].setting}, the tale began with ${parsedMemories[0].event}, touched by a ${tone} air. `;
-        for (let i = 1; i < parsedMemories.length - 1; i++) {
-          fallbackStory += `Then, in ${parsedMemories[i].setting}, ${parsedMemories[i].event}, hinting at ${parsedMemories[i].emotion}. `;
+        // --- CORRECTED API CALL ---
+        // Use the standard chat.completions.create method
+        // The client is already configured with the deployment, so no need to pass it here
+        const result = await this.openaiClient.chat.completions.create({
+            model: this.deploymentName, // Recommended to still pass model/deployment here explicitly
+            messages: messages,
+            max_tokens: 600,
+            temperature: 0.75,
+            top_p: 0.95,
+        });
+
+        if (result.choices && result.choices.length > 0 && result.choices[0].message?.content) {
+            const generatedStory = result.choices[0].message.content.trim();
+            console.log("Story generated successfully by Azure OpenAI.");
+            return generatedStory;
+        } else {
+            console.error("Azure OpenAI response was empty or malformed:", JSON.stringify(result, null, 2));
+            return "Could not generate a story (unexpected response).";
         }
-        fallbackStory += `Finally, in ${parsedMemories[parsedMemories.length - 1].setting}, ${parsedMemories[parsedMemories.length - 1].event}, leaving a ${tone} resonance.`;
-      } else {
-        fallbackStory = "No memories were found to craft a story.";
-      }
-      return fallbackStory;
+    } catch (error) {
+        console.error("Azure OpenAI API error:", error.response?.data || error.message || error);
+        // Provide a user-friendly fallback message
+        let fallbackStory = `A story reflecting on ${mood?.toLowerCase() || 'life'} could be told... (Service currently unavailable)`;
+        if (journalTexts.length === 0) {
+             fallbackStory = "No memories were available... (Service currently unavailable)";
+        }
+        return fallbackStory;
     }
   }
 
   async generate(mood) {
-    const entries = await this.fetchJournalEntries();
-    console.log("Raw API response from http://localhost:5000/api/journal/texts:", entries);
-    const textEntries = entries.texts || [];
-    if (!textEntries.length) return "No memories to generate a story from.";
-    const parsedMemories = this.parseMemories(textEntries);
-    const { tone, style } = this.adaptToMood(mood);
-    return await this.weaveStoryWithGemini(parsedMemories, tone, style);
+    if (!this.openaiClient) {
+        console.error("generate: Azure OpenAI client not available.");
+        return "Story generation service unavailable.";
+    }
+
+    const entriesData = await this.fetchJournalEntries();
+    const journalTexts = entriesData?.texts || [];
+
+    if (!journalTexts || journalTexts.length === 0) {
+      console.log("No journal entries found to generate a story.");
+      return "I couldn't find any memories to generate a story from. Try saving some journal entries first!";
+    }
+
+    console.log(`Generating story with mood: ${mood} based on ${journalTexts.length} memories.`);
+    return await this.weaveStoryWithAzureOpenAI(journalTexts, mood);
   }
 }
 

@@ -617,3 +617,62 @@
     border-radius: 0 0 10px 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   }
+
+  /* Add to InteractiveStorytellingStyles.css */
+
+.speak-story-button {
+  position: absolute; /* Position relative to the story-book */
+  top: 15px; /* Adjust as needed */
+  right: 15px; /* Adjust as needed */
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Make it round */
+  width: 50px;
+  height: 50px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  z-index: 10; /* Ensure it's above page content */
+}
+
+.speak-story-button:hover {
+  background-color: #45a049;
+}
+
+.speak-story-button:active {
+  transform: scale(0.95);
+}
+
+.speak-story-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.speak-story-button.speaking {
+  background-color: #f44336; /* Red when speaking/stopping */
+}
+.speak-story-button.speaking:hover {
+  background-color: #da190b;
+}
+
+
+.speak-story-button .speak-icon {
+  font-size: 18px; /* Adjust icon size */
+  margin-bottom: 2px;
+}
+
+/* Style for TTS errors */
+.tts-error {
+    background-color: #ffdddd;
+    border: 1px solid #fcc;
+    color: #d8000c;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 10px; /* Add some space */
+}

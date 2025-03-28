@@ -19,3 +19,5 @@ check/
 ai/EmpatheticBot/Model/merges.txt
 ai/EmpatheticBot/Model/model.safetensors
 ai/EmpatheticBot/Model/*.json
+*.env
+*env/
