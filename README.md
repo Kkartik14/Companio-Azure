@@ -61,7 +61,7 @@ cd ai/EmpatheticBot
 uvicorn conversation:app --reload
 ```
 
-###5. Set Up Environment Variables
+### 5. Set Up Environment Variables
 ```sh
 # Database Configuration
 MONGODB_URI="your_mongodb_connection_string"
