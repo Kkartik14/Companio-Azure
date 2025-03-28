@@ -1,0 +1,22 @@
+/*Companio\client\src\styles\ColorPalette.css*/
+:root {
+    /* Color palette specifically for elderly users with dementia */
+    --soft-blue: #A7C7E7;      /* Backgrounds & Calming UI elements */
+    --sage-green: #A8C69F;     /* Buttons & Interactive elements */
+    --pale-yellow: #FAF3C0;    /* Highlights & Gentle call-to-action */
+    --warm-beige: #F5E6DA;     /* Background & Text areas */
+    --muted-teal: #6BA292;     /* Accent & Icons */
+    
+    /* Text colors */
+    --text-dark: #444444;      /* Dark but not black for main text */
+    --text-medium: #666666;    /* Medium contrast for secondary text */
+    
+    /* Additional functional colors */
+    --error-light: #F5D7D7;    /* Soft red for errors */
+    --success-light: #D7E4D9;  /* Soft green for success messages */
+    
+    /* Font sizes - larger for better visibility */
+    --font-large: 1.5rem;
+    --font-medium: 1.25rem;
+    --font-small: 1.125rem;
+  }

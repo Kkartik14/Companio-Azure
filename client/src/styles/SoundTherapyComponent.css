@@ -1,0 +1,261 @@
+/* Sound Therapy Component Styles */
+.sound-therapy-card {
+    flex: 1;
+    min-width: 300px;
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    z-index: 1;
+    border: none;
+    overflow: hidden;
+    margin-top: 25px;
+  }
+  
+  .sound-therapy-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #8E6FD0, #CB74EA);
+  }
+  
+  .sound-therapy-header {
+    margin-bottom: 20px;
+  }
+  
+  .sound-therapy-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    margin: 0 0 5px;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .sound-therapy-title::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: #9975D5;
+  }
+  
+  .sound-therapy-subtitle {
+    color: var(--text-medium);
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+  
+  .mood-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .mood-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .mood-button:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+  }
+  
+  .mood-button.active {
+    background: #9975D5;
+    color: white;
+    box-shadow: 0 4px 10px rgba(153, 117, 213, 0.3);
+  }
+  
+  .sound-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+  
+  .sound-option {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .sound-option:hover {
+    background: var(--highlight);
+    transform: translateX(5px);
+  }
+  
+  .sound-option.playing {
+    background: rgba(153, 117, 213, 0.2);
+    border-left: 4px solid #9975D5;
+  }
+  
+  .sound-option.playing::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #9975D5;
+  }
+  
+  .sound-icon {
+    font-size: 1.8rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .sound-details {
+    flex: 1;
+  }
+  
+  .sound-name {
+    margin: 0 0 5px;
+    font-size: 1rem;
+    color: var(--text-dark);
+  }
+  
+  .sound-description {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-medium);
+  }
+  
+  .sound-status {
+    font-size: 1.2rem;
+  }
+  
+  .sound-controls {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+  }
+  
+  .volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .volume-slider {
+    flex: 1;
+    height: 5px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #9975D5;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+  
+  .volume-icon {
+    font-size: 1.2rem;
+    color: var(--text-medium);
+  }
+  
+  .now-playing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .now-playing p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-medium);
+  }
+  
+  .current-sound-name {
+    color: #9975D5;
+    font-weight: 600;
+  }
+  
+  /* Animation for playing sound */
+  @keyframes pulsate {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .sound-option.playing .sound-icon {
+    animation: pulsate 2s infinite ease-in-out;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .mood-selector {
+      justify-content: center;
+    }
+    
+    .sound-option {
+      padding: 10px;
+    }
+    
+    .sound-icon {
+      font-size: 1.5rem;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+    
+    .sound-name {
+      font-size: 0.9rem;
+    }
+    
+    .sound-description {
+      font-size: 0.75rem;
+    }
+  }

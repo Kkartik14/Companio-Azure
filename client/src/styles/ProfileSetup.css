@@ -1,0 +1,119 @@
+/* client/src/styles/ProfileSetupStyles.css */
+.setup-container {
+    position: relative;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    background: linear-gradient(135deg, #f9f1e9 0%, #efebe0 100%);
+    overflow-y: auto;
+  }
+  
+  .vintage-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(237, 227, 201, 0.3);
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 248, 231, 0.1) 10px, rgba(255, 248, 231, 0.1) 20px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+  
+  .floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .setup-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background: rgba(255, 248, 231, 0.9);
+    border: 2px solid #d7ccc8;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+    color: #5d4037;
+    margin-bottom: 10px;
+  }
+  
+  .setup-subtitle {
+    font-size: 1.2rem;
+    color: #4e342e;
+    margin-bottom: 20px;
+  }
+  
+  .step-indicator {
+    font-size: 1rem;
+    color: #6d4c41;
+    margin-bottom: 20px;
+  }
+  
+  .setup-step h2 {
+    font-size: 1.8rem;
+    color: #6d4c41;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    font-size: 1.2rem;
+    color: #6d4c41;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 8px;
+    border: 1px solid #d7ccc8;
+    border-radius: 5px;
+    background: #fff;
+  }
+  
+  .next-button,
+  .back-button {
+    background: #8d5524;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 10px 5px;
+  }
+  
+  .back-button {
+    background: #6d4c41;
+  }
+  
+  .next-button:hover,
+  .back-button:hover {
+    opacity: 0.9;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    margin: 10px 0;
+  }
+  
+  .success-message {
+    color: #388e3c;
+    margin: 10px 0;
+  }

@@ -1,0 +1,503 @@
+@import "../styles/ColorPalette.css";
+
+:root {
+  /* Nostalgic, warm color palette from JournalingStyles */
+  --journal-primary: #785c43;
+  --journal-accent: #d9ae94;
+  --journal-light: #f8f4e9;
+  --journal-card-bg: rgba(255, 253, 247, 0.92);
+  --journal-text: #3c2415;
+  --journal-shadow: 0 10px 30px rgba(90, 74, 58, 0.25);
+  --journal-shadow-hover: 0 15px 35px rgba(90, 74, 58, 0.35);
+  --journal-transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --paper-border-color: rgba(164, 130, 96, 0.35);
+  --warm-gold: #d4a96a;
+  --soft-pink: #eac9c1;
+  --muted-sage: #b6c199;
+  --dusty-blue: #a0b3c7;
+  --deep-amber: #c17817;
+
+  /* Reused variables */
+  --transition-standard: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --shadow-soft: 0 10px 30px rgba(90, 74, 58, 0.25);
+  --shadow-hover: 0 15px 35px rgba(90, 74, 58, 0.35);
+  --primary-color: var(--journal-primary);
+  --accent-color: var(--journal-accent);
+  --accent-gradient: linear-gradient(135deg, var(--warm-gold), var(--journal-accent));
+  --light-bg: var(--journal-light);
+  --card-bg: var(--journal-card-bg);
+  --text-primary: var(--journal-text);
+  --text-secondary: #5a4a3a;
+  --error-color: #ef476f;
+  --success-color: #06d6a0;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at bottom right, #e6d7ca 0%, #f3e9dd 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Noto Serif', Georgia, serif;
+}
+
+/* Vintage background texture */
+.vintage-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.1)),
+                    linear-gradient(to bottom, rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.1));
+  background-size: 20px 20px, 20px 20px;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Floating shapes in background */
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.floating-shapes::before,
+.floating-shapes::after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(45deg, var(--soft-pink), transparent);
+  opacity: 0.2;
+  border-radius: 50%;
+}
+
+.floating-shapes::before {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: 20%;
+  animation: float 25s linear infinite;
+}
+
+.floating-shapes::after {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: 15%;
+  animation: float 20s linear infinite reverse;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, 15px) rotate(5deg); }
+  50% { transform: translate(5px, -10px) rotate(10deg); }
+  75% { transform: translate(-10px, 5px) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--paper-border-color);
+  z-index: 10;
+  overflow: hidden;
+  animation: cardAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition: all var(--transition-standard);
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--accent-gradient);
+}
+
+.welcome-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  text-align: center;
+  color: var(--text-primary);
+  animation: slideDown 0.6s ease-out 0.2s both;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 30px;
+  animation: slideDown 0.6s ease-out 0.4s both;
+  font-weight: 400;
+}
+
+/* Quote styling */
+.quote-container {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 20px 30px;
+  margin-bottom: 30px;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid var(--accent-color);
+  animation: fadeIn 0.8s ease-out 0.5s both;
+}
+
+.inspirational-quote {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Form styling */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.8s ease-out 0.6s both;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-group:focus-within {
+  transform: translateY(-2px);
+}
+
+label {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.3s ease;
+}
+
+.form-icon {
+  margin-right: 8px;
+  color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+.form-group:focus-within label,
+.form-group:focus-within .form-icon {
+  color: var(--accent-color);
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 1); /* Increased opacity for better visibility */
+  border: 1px solid var(--paper-border-color);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  z-index: 2; /* Ensure input is above the focus effect */
+  position: relative; /* Ensure z-index works */
+}
+
+/* Add padding to the password input to accommodate the toggle button */
+.password-input input {
+  padding-right: 60px; /* Space for the toggle button */
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(217, 174, 148, 0.2);
+}
+
+.input-focus-effect {
+  position: absolute;
+  bottom: -3px; /* Position further below the input to avoid overlap */
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-color);
+  opacity: 0; /* Hide by default */
+  transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+  z-index: 1; /* Ensure it's below the input */
+}
+
+input:focus ~ .input-focus-effect {
+  width: 100%;
+  opacity: 1; /* Show when input is focused */
+}
+
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  z-index: 3; /* Ensure toggle button is above the input */
+}
+
+.password-toggle:hover {
+  background-color: rgba(90, 74, 58, 0.1);
+  color: var(--primary-color);
+}
+
+.password-toggle:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Button styling */
+.auth-button {
+  position: relative;
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(217, 174, 148, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.button-text {
+  position: relative;
+  z-index: 2;
+}
+
+.button-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.auth-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(217, 174, 148, 0.4);
+}
+
+.auth-button:hover .button-shine {
+  left: 100%;
+}
+
+.auth-button:active {
+  transform: translateY(1px);
+}
+
+/* Alternative option styling */
+.auth-alt-option {
+  margin-top: 30px;
+  text-align: center;
+  padding: 20px 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  animation: fadeIn 0.8s ease-out 1s both;
+}
+
+.auth-alt-option p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.text-button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: var(--accent-color);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.text-button:hover {
+  color: var(--accent-color);
+}
+
+.text-button:hover::after {
+  width: 70%;
+}
+
+/* Error and success messages */
+.error-message {
+  background-color: rgba(239, 71, 111, 0.1);
+  color: var(--error-color);
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  border-left: 3px solid var(--error-color);
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.success-message {
+  background-color: rgba(6, 214, 160, 0.1);
+  color: var(--success-color);
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+  border-left: 3px solid var(--success-color);
+  animation: pulse 1.5s infinite;
+}
+
+/* Helper text */
+.helper-text {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+  animation: fadeIn 0.8s ease-out 1.2s both;
+}
+
+/* Success animation */
+.success-animation {
+  animation: successPulse 1s ease;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes cardAppear {
+  0% { opacity: 0; transform: scale(0.95); }
+  70% { transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(6, 214, 160, 0); }
+  50% { transform: scale(1.03); box-shadow: 0 0 20px rgba(6, 214, 160, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(6, 214, 160, 0); }
+}
+
+/* Media queries */
+@media (max-width: 600px) {
+  .auth-card {
+    padding: 30px 20px;
+  }
+  .welcome-title {
+    font-size: 2rem;
+  }
+  input, .auth-button {
+    padding: 14px 16px;
+  }
+  .floating-shapes::before {
+    width: 120px;
+    height: 120px;
+    top: 5%;
+    left: 10%;
+  }
+  .floating-shapes::after {
+    width: 100px;
+    height: 100px;
+    top: 70%;
+    right: 10%;
+  }
+  .password-input input {
+    padding-right: 50px;
+  }
+}

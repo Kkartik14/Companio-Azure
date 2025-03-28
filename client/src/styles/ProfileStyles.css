@@ -1,0 +1,126 @@
+/* client/src/styles/ProfileStyles.css */
+.profile-container {
+    position: relative;
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    background: linear-gradient(135deg, #f9f1e9 0%, #efebe0 100%); /* Vintage gradient */
+    overflow-y: auto;
+  }
+  
+  .vintage-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(237, 227, 201, 0.3); /* Light vintage overlay */
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 248, 231, 0.1) 10px, rgba(255, 248, 231, 0.1) 20px); /* Subtle texture */
+    opacity: 0.5;
+    z-index: -1;
+  }
+  
+  .floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .vintage-title {
+    font-size: 2.5rem;
+    color: #5d4037;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .decorative-line {
+    width: 100px;
+    height: 2px;
+    background: #8d5524;
+    margin: 10px auto;
+  }
+  
+  .profile-section {
+    position: relative;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    background: rgba(255, 248, 231, 0.9);
+    border: 2px solid #d7ccc8;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-section h2 {
+    font-size: 1.8rem;
+    color: #6d4c41;
+    margin-bottom: 15px;
+  }
+  
+  .profile-section p {
+    font-size: 1.2rem;
+    color: #4e342e;
+    margin: 5px 0;
+  }
+  
+  .edit-button {
+    background: #8d5524;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+  
+  .edit-button:hover {
+    background: #6d4c41;
+  }
+  
+  .faces-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+  }
+  
+  .face-card {
+    text-align: center;
+  }
+  
+  .face-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #d7ccc8;
+  }
+  
+  .profile-section label {
+    font-size: 1.2rem;
+    color: #6d4c41;
+    margin-right: 10px;
+  }
+  
+  .profile-section input,
+  .profile-section select {
+    font-size: 1.2rem;
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #d7ccc8;
+    border-radius: 5px;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    text-align: center;
+    margin: 10px 0;
+  }

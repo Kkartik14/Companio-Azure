@@ -1,0 +1,1470 @@
+/*Companio\client\src\styles\JournalingStyles.css*/
+@import "../styles/ColorPalette.css";
+
+:root {
+  /* Nostalgic, warm color palette */
+  --journal-primary: #785c43;
+  --journal-accent: #d9ae94;
+  --journal-light: #f8f4e9;
+  --journal-card-bg: rgba(255, 253, 247, 0.92);
+  --journal-text: #3c2415;
+  --journal-shadow: 0 10px 30px rgba(90, 74, 58, 0.25);
+  --journal-shadow-hover: 0 15px 35px rgba(90, 74, 58, 0.35);
+  --journal-transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  /* Accent colors */
+  --warm-gold: #d4a96a;
+  --soft-pink: #eac9c1;
+  --muted-sage: #b6c199;
+  --dusty-blue: #a0b3c7;
+  --deep-amber: #c17817;
+  
+  /* Paper texture properties */
+  --paper-texture-opacity: 0.08;
+  --paper-border-color: rgba(164, 130, 96, 0.35);
+}
+
+/* Container and background */
+.journal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at bottom right, #e6d7ca 0%, #f3e9dd 100%);
+  padding: 30px 20px 60px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Noto Serif', Georgia, serif;
+}
+
+/* Vintage background texture */
+.vintage-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.1)),
+                    linear-gradient(to bottom, rgba(255, 253, 247, 0.5), rgba(255, 253, 247, 0.1));
+  background-size: 20px 20px, 20px 20px;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Floating shapes in background */
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.floating-shapes::before,
+.floating-shapes::after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(45deg, var(--soft-pink), transparent);
+  opacity: 0.2;
+  border-radius: 50%;
+}
+
+.floating-shapes::before {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: 20%;
+  animation: float 25s linear infinite;
+}
+
+.floating-shapes::after {
+  width: 150px;
+  height: 150px;
+  top: 60%;
+  right: 15%;
+  animation: float 20s linear infinite reverse;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, 15px) rotate(5deg); }
+  50% { transform: translate(5px, -10px) rotate(10deg); }
+  75% { transform: translate(-10px, 5px) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Journal header */
+.journal-header {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.vintage-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--journal-primary);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+  margin-bottom: 0;
+}
+
+.decorative-line {
+  height: 4px;
+  width: 180px;
+  background: linear-gradient(to right, transparent, var(--warm-gold), transparent);
+  margin: 10px auto 20px;
+}
+
+/* Main card styles */
+.journal-card {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--journal-card-bg);
+  box-shadow: var(--journal-shadow);
+  border: 1px solid var(--paper-border-color);
+  z-index: 10;
+  overflow: hidden;
+  animation: cardAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition: all var(--journal-transition);
+}
+
+.vintage-paper {
+  position: relative;
+}
+
+.paper-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(45deg, rgba(222, 215, 205, 0.1) 0px, rgba(222, 215, 205, 0.1) 2px, transparent 2px, transparent 4px);
+  background-size: 8px 8px;
+  opacity: var(--paper-texture-opacity);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(222, 215, 205, 0.1) 0%, transparent 70%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 95% 95%;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(45deg, var(--journal-accent), transparent);
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  z-index: 2;
+  border-radius: 5px;
+}
+
+.top-left {
+  top: 10px;
+  left: 10px;
+  transform: rotate(0deg);
+}
+
+.top-right {
+  top: 10px;
+  right: 10px;
+  transform: rotate(90deg);
+}
+
+.bottom-left {
+  bottom: 10px;
+  left: 10px;
+  transform: rotate(270deg);
+}
+
+.bottom-right {
+  bottom: 10px;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+.journal-card:hover {
+  box-shadow: var(--journal-shadow-hover);
+}
+
+.journal-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 5;
+}
+
+.welcome-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--journal-primary);
+  margin: 0 15px;
+  text-align: center;
+}
+
+.title-icon {
+  color: var(--warm-gold);
+  width: 24px;
+  height: 24px;
+}
+
+.journal-subtitle {
+  text-align: center;
+  color: var(--journal-text);
+  opacity: 0.8;
+  font-style: italic;
+  margin-bottom: 25px;
+}
+
+/* Prompt styling */
+.prompt-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+  position: relative;
+}
+
+.prompt-decoration {
+  height: 2px;
+  width: 60px;
+  background: linear-gradient(to right, transparent, var(--journal-accent));
+  margin: 0 15px;
+}
+
+.prompt-decoration.right {
+  background: linear-gradient(to left, transparent, var(--journal-accent));
+}
+
+.journal-prompt {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  color: var(--journal-primary);
+  text-align: center;
+  max-width: 500px;
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 0 10px;
+  line-height: 1.6;
+}
+
+/* Success message */
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 15px;
+  color: var(--deep-amber);
+  background-color: rgba(212, 169, 106, 0.15);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  animation: pulse 2s infinite;
+}
+
+.success-message svg {
+  margin-right: 10px;
+  color: var(--deep-amber);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Form styling */
+.journal-form {
+  position: relative;
+  z-index: 5;
+}
+
+.image-container {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  position: relative;
+  border: 1px solid var(--paper-border-color);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all var(--journal-transition);
+}
+
+/* Photo filters */
+.image-container.sepia img {
+  filter: sepia(0.7) contrast(1.1);
+}
+
+.image-container.polaroid img {
+  filter: contrast(1.1) brightness(1.05) saturate(1.1);
+  border: 15px solid white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.image-container.faded img {
+  filter: contrast(0.9) brightness(1.1) saturate(0.85);
+}
+
+.image-container.blackwhite img {
+  filter: grayscale(1) contrast(1.2);
+}
+
+.memory-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all var(--journal-transition);
+}
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--journal-text);
+  opacity: 0.7;
+  text-align: center;
+  padding: 20px;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: var(--journal-accent);
+  animation: float 6s ease-in-out infinite;
+}
+
+.favorite-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #aaa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-button:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.1);
+}
+
+.favorite-button.favorited {
+  color: #ff6b6b;
+}
+
+.favorite-button.favorited svg {
+  animation: heartBeat 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* Filter options */
+.filter-options {
+  margin-bottom: 20px;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  color: var(--journal-text);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-button {
+  padding: 8px 12px;
+  border: 1px solid var(--journal-accent);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--journal-text);
+}
+
+.filter-button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.filter-button.active {
+  background: var(--journal-accent);
+  color: white;
+}
+
+/* Photo action buttons */
+.photo-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: linear-gradient(to bottom, var(--journal-light), #f0e6d9);
+  border: 1px solid var(--paper-border-color);
+  border-radius: 30px;
+  font-size: 0.95rem;
+  color: var(--journal-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.action-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.action-button:active {
+  transform: translateY(-1px);
+}
+
+.action-button svg {
+  margin-right: 8px;
+}
+
+.action-icon {
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Form inputs */
+.form-group {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: var(--journal-text);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.form-icon {
+  margin-right: 8px;
+  color: var(--warm-gold);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.vintage-input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid var(--paper-border-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  color: var(--journal-text);
+  line-height: 1.6;
+  transition: all 0.3s ease;
+  resize: vertical;
+  position: relative;
+  z-index: 1;
+}
+
+.vintage-input:focus {
+  outline: none;
+  border-color: var(--journal-accent);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 3px rgba(217, 174, 148, 0.2);
+}
+
+.input-focus-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.form-group.focused .input-focus-effect {
+  box-shadow: 0 0 0 3px rgba(217, 174, 148, 0.2);
+}
+
+.input-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.input-decoration {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(45deg, var(--journal-accent), transparent);
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  border-radius: 50%;
+}
+
+/* Mood selector */
+.mood-selector {
+  margin-bottom: 25px;
+}
+
+.mood-selector label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--journal-text);
+}
+
+.mood-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mood-button {
+  padding: 8px 15px;
+  border: 1px solid var(--journal-accent);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--journal-text);
+}
+
+.mood-button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.mood-button.selected {
+  background: var(--journal-accent);
+  color: white;
+}
+
+/* Ambiance selector */
+.ambiance-selector {
+  margin-bottom: 25px;
+}
+
+.ambiance-selector label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--journal-text);
+}
+
+.vintage-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--paper-border-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  color: var(--journal-text);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--journal-text) 50%),
+                    linear-gradient(135deg, var(--journal-text) 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1em + 2px),
+                       calc(100% - 15px) calc(1em + 2px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease;
+}
+
+.vintage-select:focus {
+  outline: none;
+  border-color: var(--journal-accent);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Voice button */
+.voice-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 25px;
+  background: linear-gradient(to bottom, var(--dusty-blue), #8ca5be);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(160, 179, 199, 0.3);
+}
+
+.voice-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(160, 179, 199, 0.4);
+}
+
+.voice-button svg {
+  margin-right: 10px;
+}
+
+.voice-button.recording {
+  background: linear-gradient(to bottom, #e27474, #d35f5f);
+  animation: recordingPulse 1.5s infinite;
+}
+
+@keyframes recordingPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Save button */
+.save-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to bottom, var(--warm-gold), #c49a5f);
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(212, 169, 106, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.save-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(212, 169, 106, 0.4);
+}
+
+.save-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.save-button svg {
+  margin-right: 10px;
+}
+
+.button-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Success animation */
+.success-animation {
+  animation: successPulse 2s ease-out;
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); box-shadow: var(--journal-shadow); }
+  40% { transform: scale(1.02); box-shadow: 0 0 30px rgba(212, 169, 106, 0.5); }
+  80% { transform: scale(1); box-shadow: var(--journal-shadow); }
+}
+
+/* Weather effects */
+.weather-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(160, 179, 199, 0.5));
+  animation: rain linear infinite;
+}
+
+@keyframes rain {
+  0% { transform: translateY(-20px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(calc(100vh + 20px)); opacity: 0; }
+}
+
+.snowflake {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  animation: snow linear infinite;
+}
+
+@keyframes snow {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(calc(100vh + 20px)) rotate(360deg); opacity: 0; }
+}
+
+.sunshine-ray {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(ellipse at center, rgba(255, 217, 128, 0.4) 0%, rgba(255, 217, 128, 0) 70%);
+  animation: sunshine 10s linear infinite;
+}
+
+@keyframes sunshine {
+  0% { transform: rotate(0deg); opacity: 0.5; }
+  50% { opacity: 0.8; }
+  100% { transform: rotate(360deg); opacity: 0.5; }
+}
+
+.falling-leaf {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(ellipse at center, var(--muted-sage) 30%, transparent 70%);
+  opacity: 0.6;
+  animation: leaf ease-in-out infinite;
+}
+
+@keyframes leaf {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(calc(100vh + 20px)) rotate(360deg); opacity: 0; }
+}
+
+/* Memories section */
+.memories-section {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+.memories-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.memories-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--journal-primary);
+  margin: 0 15px;
+}
+
+.memories-icon {
+  color: var(--soft-pink);
+}
+
+.no-memories {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  text-align: center;
+  background: var(--journal-card-bg);
+  border-radius: 16px;
+  border: 1px solid var(--paper-border-color);
+}
+
+.no-memories p {
+  color: var(--journal-text);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: var(--journal-accent);
+  margin-bottom: 15px;
+  opacity: 0.6;
+}
+
+.memories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.memory-card {
+  background: var(--journal-card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--journal-shadow);
+  border: 1px solid var(--paper-border-color);
+  transition: all 0.3s ease;
+}
+
+.memory-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--journal-shadow-hover);
+}
+
+.memory-image-container {
+  height: 200px;
+  position: relative;
+}
+
+.memory-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memory-favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #ff6b6b;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.memory-content {
+  padding: 15px;
+}
+
+.memory-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--journal-text);
+  margin-bottom: 15px;
+  max-height: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.memory-mood {
+  display: inline-block;
+  padding: 5px 10px;
+  background: rgba(217, 174, 148, 0.15);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: var(--journal-primary);
+  margin-bottom: 10px;
+}
+
+.memory-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--journal-text);
+  opacity: 0.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .journal-card {
+    padding: 25px;
+  }
+  
+  .welcome-title {
+    font-size: 1.8rem;
+  }
+  
+  .photo-actions {
+    flex-direction: column;
+  }
+  
+  .action-button {
+    width: 100%;
+  }
+  
+  .filter-buttons {
+    justify-content: center;
+  }
+  
+  .memories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .vintage-title {
+    font-size: 2.5rem;
+  }
+  
+  .journal-card {
+    padding: 20px 15px;
+  }
+  
+  .mood-buttons {
+    gap: 5px;
+  }
+  
+  .mood-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .filter-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Card animation */
+@keyframes cardAppear {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.face-recognition-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ff6b6b;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.face-recognition-button:hover {
+  transform: scale(1.1);
+  background-color: #ff8787;
+}
+
+.face-recognition-button .action-icon {
+  color: white;
+  width: 30px;
+  height: 30px;
+}
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1rem;
+  color: #5d4037;
+  margin-bottom: 0.5rem;
+}
+
+.form-group .form-icon {
+  margin-right: 0.5rem;
+  color: #8d5524;
+}
+
+.form-group .input-wrapper {
+  position: relative;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #d7ccc8;
+  border-radius: 8px;
+  background: rgba(255, 248, 225, 0.9);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  color: #4e342e;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #8d5524;
+  box-shadow: 0 0 8px rgba(141, 85, 36, 0.3);
+  outline: none;
+}
+
+.form-group .input-focus-effect {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group.focused .input-focus-effect {
+  border-color: #8d5524;
+}
+
+.form-group .input-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.form-group .input-decoration {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #d7ccc8;
+  border-radius: 50%;
+}
+
+.form-group .input-decoration.top-left { top: -5px; left: -5px; }
+.form-group .input-decoration.top-right { top: -5px; right: -5px; }
+.form-group .input-decoration.bottom-left { bottom: -5px; left: -5px; }
+.form-group .input-decoration.bottom-right { bottom: -5px; right: -5px; }
+
+.memory-with {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  color: #5d4037;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.memory-with .memory-icon {
+  margin-right: 0.5rem;
+  color: #8d5524;
+}
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add space between input and test button */
+}
+
+.mic-button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 10;
+}
+
+.mic-button .action-icon {
+  width: 20px;
+  height: 20px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.mic-button:hover .action-icon {
+  color: #ff6f61;
+}
+
+.mic-button.recording .action-icon {
+  color: #ff6f61;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Adjust input padding to prevent text overlap with mic button */
+.vintage-input {
+  padding-right: 40px; /* Leave space for the mic button */
+}
+
+/* For textarea specifically */
+.form-group textarea.vintage-input {
+  padding-right: 40px;
+  resize: none; /* Optional: prevent resizing if desired */
+}
+
+/* Style for test buttons */
+.action-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #e0e0e0;
+}
+.fancy-recall-button.cute-recall {
+  position: fixed; /* Fixed to the viewport */
+  bottom: 20px; /* Distance from the bottom of the viewport */
+  right: 20px; /* Distance from the right of the viewport */
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ffccff 0%, #cce6ff 100%);
+  border: 2px solid #ff99cc;
+  border-radius: 25px;
+  color: #663399;
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1000; /* Ensure it stays above other content */
+}
+
+.fancy-recall-button.cute-recall:hover {
+  transform: scale(1.05) rotate(-2deg);
+  background: linear-gradient(135deg, #ff99cc 0%, #99ccff 100%);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+.fancy-recall-button.cute-recall .recall-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  fill: #ff66b2;
+  transition: transform 0.3s ease;
+}
+
+.fancy-recall-button.cute-recall:hover .recall-icon {
+  transform: rotate(360deg);
+}
+
+.fancy-recall-button.cute-recall .button-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-20deg);
+  animation: shine 1.5s infinite;
+}
+
+.fancy-recall-button.cute-recall .cute-sparkle {
+  margin-left: 8px;
+  font-size: 1.2rem;
+  animation: sparkle 1s infinite alternate;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-20deg); }
+  50% { transform: translateX(100%) skewX(-20deg); }
+  100% { transform: translateX(100%) skewX(-20deg); }
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.5; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+.recall-options.vintage-recall-dropdown {
+  position: fixed; 
+  bottom: 60px;
+  right: 20px; 
+  z-index: 1000; 
+}
+.face-recognition-button {
+  position: fixed;
+  bottom: 90px; 
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ff6b6b;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 1000;
+}
+
+.face-recognition-button:hover {
+  transform: scale(1.1);
+  background-color: #ff8787;
+}
+
+.face-recognition-button .action-icon {
+  color: white;
+  width: 30px;
+  height: 30px;
+}
+/* Modal Overlay (blurred background) */
+.recall-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  backdrop-filter: blur(5px); /* Blur the background */
+  -webkit-backdrop-filter: blur(5px); /* For Safari support */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Above all other content */
+}
+
+/* Modal Container */
+.recall-modal {
+  background: #fffaf0; /* Vintage paper-like background */
+  border-radius: 15px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border: 2px solid #ff9999; /* Pink border to match theme */
+  animation: fadeIn 0.3s ease;
+}
+
+/* Fade-in animation for the modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal Header */
+.recall-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d4b2a8;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.recall-modal .modal-header h3 {
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  color: #5c4033;
+  font-size: 1.5rem;
+}
+
+/* Close Button */
+.recall-modal .modal-close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #ff6666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.recall-modal .modal-close-button:hover {
+  color: #ff3333;
+}
+
+/* Modal Content */
+.recall-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* People List */
+.recall-modal .people-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background: rgba(255, 245, 238, 0.5);
+  border-radius: 10px;
+  border: 1px solid #d4b2a8;
+}
+
+.recall-modal .people-list h4 {
+  margin: 0 0 10px 0;
+  font-family: 'Courier New', Courier, monospace;
+  color: #5c4033;
+  font-size: 1.1rem;
+}
+
+.recall-modal .people-list p {
+  color: #5c4033;
+  font-style: italic;
+}
+
+/* Person Button */
+.recall-modal .person-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 5px;
+  background: linear-gradient(135deg, #ffccff 0%, #cce6ff 100%);
+  border: 1px solid #ff99cc;
+  border-radius: 10px;
+  color: #663399;
+  font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.recall-modal .person-button:hover {
+  transform: scale(1.02);
+  background: linear-gradient(135deg, #ff99cc 0%, #99ccff 100%);
+}
+
+.recall-modal .person-button:disabled {
+  background: #d3d3d3;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.recall-modal .webcam-recall-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: linear-gradient(135deg, #ffcc99 0%, #ff9999 100%);
+  border: none;
+  border-radius: 15px;
+  color: #5c4033;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.recall-modal .webcam-recall-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ff9999 0%, #ffcc99 100%);
+}
+
+.recall-modal .webcam-recall-button:disabled {
+  background: #d3d3d3;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.recall-modal .webcam-recall-button .action-icon {
+  width: 20px;
+  height: 20px;
+  fill: #5c4033;
+}
+
+.journal-container.modal-open {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
