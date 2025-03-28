@@ -486,7 +486,7 @@ app.post('/api/face-recognition/capture', authMiddleware, (req, res) => {
   const userFramePath = path.join(pythonCwd, `captured_frame_${req.userId}.jpg`);
   const originalFramePath = path.join(pythonCwd, 'captured_frame.jpg');
 
-  const pythonCommand = process.platform === 'win32' ? '"C:\\Program Files\\Python312\\python.exe"' : 'python3';
+  const pythonCommand = '/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11';
   activePythonProcess = spawn(pythonCommand, [pythonPath], {
     env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
     cwd: pythonCwd,
@@ -567,8 +567,25 @@ app.post('/api/face-recognition/capture', authMiddleware, (req, res) => {
 
 app.get('/api/captured-frame', authMiddleware, (req, res) => {
   const framePath = path.join(__dirname, '..', 'ai', 'Face_Recognition', `captured_frame_${req.userId}.jpg`);
-  if (fs.existsSync(framePath)) res.sendFile(framePath);
-  else res.status(404).json({ error: 'Frame not found' });
+  console.log(`Attempting to send frame for user ${req.userId}: ${framePath}`); // Add log
+
+  if (fs.existsSync(framePath)) {
+    // Send the correct user-specific file
+    res.sendFile(framePath, (err) => {
+        if (err) {
+            console.error(`Error sending file ${framePath}:`, err);
+            // Avoid sending default error page, send JSON error
+            if (!res.headersSent) {
+               res.status(500).json({ error: 'Error sending captured frame.' });
+            }
+        } else {
+            console.log(`Successfully sent frame: ${framePath}`);
+        }
+    });
+  } else {
+    console.log(`Frame not found for user ${req.userId}: ${framePath}`); // Add log
+    res.status(404).json({ error: 'Captured frame not found for this user.' });
+  }
 });
 
 app.get('/api/weather', authMiddleware, async (req, res) => {
@@ -600,6 +617,44 @@ function extractAccountKey(connectionString) {
   const keyPart = parts.find(part => part.trim().startsWith('AccountKey='));
   return keyPart ? keyPart.trim().substring('AccountKey='.length) : null;
 }
+
+app.get('/api/speech/token', authMiddleware, async (req, res) => {
+  const speechKey = process.env.AZURE_SPEECH_KEY;
+  const speechRegion = process.env.AZURE_SPEECH_REGION;
+
+  if (!speechKey || !speechRegion) {
+    console.error("Azure Speech Key or Region not configured in .env");
+    return res.status(500).json({ message: 'Speech service configuration error on server.' });
+  }
+
+  // The token endpoint URL depends on the region
+  const tokenEndpoint = `https://${speechRegion}.api.cognitive.microsoft.com/sts/v1.0/issueToken`;
+
+  try {
+    console.log(`Requesting speech token from: ${tokenEndpoint}`); // Log endpoint
+    const response = await axios.post(tokenEndpoint, null, { // POST request with empty body
+      headers: {
+        'Ocp-Apim-Subscription-Key': speechKey,
+        'Content-Type': 'application/x-www-form-urlencoded' // Required header
+        // 'Content-Length': 0 // Sometimes needed, axios usually handles this
+      }
+    });
+
+    console.log('Successfully obtained speech token.'); // Log success
+    // Send the token and region back to the client
+    res.json({ token: response.data, region: speechRegion });
+
+  } catch (error) {
+    console.error('Error fetching Azure Speech token:', error.response?.data || error.message);
+    // Provide more detail if available
+    let status = error.response?.status || 500;
+    let message = 'Failed to obtain speech service token.';
+    if (status === 401 || status === 403) {
+        message = 'Invalid Azure Speech key or endpoint.';
+    }
+    res.status(status).json({ message: message });
+  }
+});
 
 process.on('SIGINT', async () => {
   console.log('Shutting down server...');
